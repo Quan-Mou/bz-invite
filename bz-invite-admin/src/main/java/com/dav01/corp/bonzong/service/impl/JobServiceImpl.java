@@ -13,10 +13,13 @@ import com.dav01.corp.bonzong.handler.exception.SystemException;
 import com.dav01.corp.bonzong.service.IJobService;
 import com.dav01.corp.bonzong.service.IResumeService;
 import com.dav01.corp.bonzong.util.BeanCopyUtil;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.NullableUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -50,7 +53,7 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements IJobS
         }
         Job saveJob = BeanCopyUtil.copyBean(job, Job.class);
         this.save(saveJob);
-        return new R(SystemEnum.SUCCESS);
+        return R.success();
     }
 
     @Override
@@ -69,18 +72,17 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements IJobS
             });
             jobService.removeByIds(ids);
         }
-        return new R(SystemEnum.SUCCESS);
+        return R.success();
     }
 
     @Override
     public R update(Job job) {
 
         if (Objects.isNull(job)) {
-//            return
+            return null;
         }
-
-
-        return null;
+        this.update(job);
+        return R.success();
     }
 
     @Override
@@ -94,6 +96,22 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements IJobS
 
     @Override
     public R list(Integer categoryId, Integer page, Integer pageSze, String jobName) {
+
+
+
+
+
+
+
+        LambdaQueryWrapper<Job> query = new LambdaQueryWrapper<>();
+        query.like(StringUtils.hasText(jobName),Job::getJobName,jobName);
+        Page objects = PageHelper.startPage(page, page);
+        System.out.println(objects);
+        this.list(query);
+
+
+
+
         return null;
     }
 }
