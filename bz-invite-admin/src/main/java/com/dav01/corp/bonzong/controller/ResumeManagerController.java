@@ -1,8 +1,10 @@
 package com.dav01.corp.bonzong.controller;
 
 import com.dav01.corp.bonzong.domain.ResultPage;
+import com.dav01.corp.bonzong.service.IResumeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,6 +24,11 @@ import java.util.Date;
 @RestController
 @RequestMapping("resume")
 public class ResumeManagerController {
+
+
+    @Autowired
+    private IResumeService resumeService;
+
 
     @ApiOperation("查看应聘列表")
     @GetMapping("list")

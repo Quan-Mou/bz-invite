@@ -54,6 +54,14 @@ public class R<T> {
         return r;
     }
 
+    public static <T> R success(T data) {
+        R r = new R();
+        r.setCode(SystemEnum.SUCCESS.getCode());
+        r.setMsg(SystemEnum.SUCCESS.getMsg());
+        r.setData(data);
+        return r;
+    }
+
 
 //    public static R error() {
 //

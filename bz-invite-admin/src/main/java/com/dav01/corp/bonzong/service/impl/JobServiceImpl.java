@@ -8,8 +8,10 @@ import com.dav01.corp.bonzong.dao.mapper.JobMapper;
 import com.dav01.corp.bonzong.domain.R;
 import com.dav01.corp.bonzong.domain.dto.AddJobDTO;
 import com.dav01.corp.bonzong.domain.entity.Job;
+import com.dav01.corp.bonzong.domain.entity.JobCategory;
 import com.dav01.corp.bonzong.domain.entity.ResumeJob;
 import com.dav01.corp.bonzong.handler.exception.SystemException;
+import com.dav01.corp.bonzong.service.IJobCategoryService;
 import com.dav01.corp.bonzong.service.IJobService;
 import com.dav01.corp.bonzong.service.IResumeService;
 import com.dav01.corp.bonzong.util.BeanCopyUtil;
@@ -34,17 +36,16 @@ import java.util.Objects;
 @Slf4j
 public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements IJobService {
 
-
-    @Autowired
-    private IResumeService resumeService;
-
-
     @Autowired
     private TResumeJobService resumeJobService;
 
-    @Autowired
-    private IJobService jobService;
+//    @Autowired
+//    private IJobService jobService;
 
+    
+    @Autowired
+
+    private IJobCategoryService jobCategoryService;
 
     @Override
     public R insert(Integer jobCategory, AddJobDTO job) {
@@ -59,7 +60,8 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements IJobS
     @Override
     public R batchDelete(List<Integer> ids) {
         if(ids.size()>0) {
-            List<Job> resumeJobs = jobService.listByIds(ids);
+            List<Job> resumeJobs = this.listByIds(ids);
+
             resumeJobs.forEach(resumeJob -> {
                 Integer jobId = resumeJob.getJobId();
                 LambdaQueryWrapper<ResumeJob> query = new LambdaQueryWrapper<>();
@@ -70,9 +72,10 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements IJobS
                     throw new SystemException(JobEnum.NOT_DELETE_SEND_JOB.getCode(),mgs);
                 }
             });
-            jobService.removeByIds(ids);
+            this.removeByIds(ids);
         }
         return R.success();
+//        return null;
     }
 
     @Override
@@ -90,29 +93,28 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements IJobS
         if(id == null) {
             return  null;
         }
-        Job job = jobService.getById(id);
+        Job job = this.getById(id);
         return new R(SystemEnum.SUCCESS,job);
     }
 
     @Override
     public R list(Integer categoryId, Integer page, Integer pageSze, String jobName) {
-
-
-
-
-
-
+        JobCategory category = null;
+        if(categoryId != null) {
+            LambdaQueryWrapper<JobCategory> jobCategoryQuery = new LambdaQueryWrapper<>();
+            jobCategoryQuery.eq(JobCategory::getJobCategoryId,categoryId);
+            category = jobCategoryService.getOne(jobCategoryQuery);
+        }
 
         LambdaQueryWrapper<Job> query = new LambdaQueryWrapper<>();
-        query.like(StringUtils.hasText(jobName),Job::getJobName,jobName);
+        query.eq(category != null,Job::getJobCategoryId,category.getJobCategoryId()).like(StringUtils.hasText(jobName),Job::getJobName,jobName);
         Page objects = PageHelper.startPage(page, page);
         System.out.println(objects);
-        this.list(query);
+        List<Job> list = this.list(query);
+        System.out.println("工作岗位列表：" + list);
+        return R.success(list);
 
-
-
-
-        return null;
+//        return null;
     }
 }
 

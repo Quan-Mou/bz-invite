@@ -54,7 +54,7 @@ public class JobManagerController {
 
 
     @ApiOperation(value = "查看岗位信息")
-    @PutMapping("getJobById")
+    @GetMapping("getJobById")
     public R getJobById(@RequestParam(name = "id") Integer id) {
 //        TODO：查看岗位信息
         return jobService.getJobById(id);

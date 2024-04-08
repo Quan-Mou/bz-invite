@@ -17,6 +17,8 @@ public class JobCategory implements Serializable {
     private Integer jobCategoryId;
     //分类名称
     private String jobCategoryName;
+    //    岗位id
+    private Integer jobId;
     //创建时间
     private Date createTime;
     //更新时间
