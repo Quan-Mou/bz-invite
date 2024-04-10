@@ -66,7 +66,7 @@ public class JobManagerController {
             @RequestParam(name = "categoryId",required = false) Integer categoryId,
             @RequestParam(name = "page") Integer page,
             @RequestParam(name = "pageSize") Integer pageSze,
-            @RequestParam(name = "jobName") String jobName
+            @RequestParam(name = "jobName",required = false) String jobName
 
     ) {
 

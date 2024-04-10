@@ -23,6 +23,7 @@ import org.springframework.data.util.NullableUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -53,6 +54,7 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements IJobS
            throw new  SystemException(JobEnum.JOB_CATEGORY_NOT_NULL.getCode(),JobEnum.JOB_CATEGORY_NOT_NULL.getMsg());
         }
         Job saveJob = BeanCopyUtil.copyBean(job, Job.class);
+        saveJob.setJobId(jobCategory);
         this.save(saveJob);
         return R.success();
     }
@@ -99,22 +101,30 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements IJobS
 
     @Override
     public R list(Integer categoryId, Integer page, Integer pageSze, String jobName) {
+        LambdaQueryWrapper<Job> query = new LambdaQueryWrapper<>();
         JobCategory category = null;
         if(categoryId != null) {
             LambdaQueryWrapper<JobCategory> jobCategoryQuery = new LambdaQueryWrapper<>();
             jobCategoryQuery.eq(JobCategory::getJobCategoryId,categoryId);
             category = jobCategoryService.getOne(jobCategoryQuery);
+            if(category == null) {
+                return R.success(new ArrayList<>());
+            }
         }
 
-        LambdaQueryWrapper<Job> query = new LambdaQueryWrapper<>();
-        query.eq(category != null,Job::getJobCategoryId,category.getJobCategoryId()).like(StringUtils.hasText(jobName),Job::getJobName,jobName);
+        if(category != null) {
+            query.eq(Job::getJobCategoryId,category.getJobCategoryId());
+        }
+
+        if(StringUtils.hasText(jobName)) {
+            query.and(q -> q.like(StringUtils.hasText(jobName),Job::getJobName,jobName));
+        }
+
         Page objects = PageHelper.startPage(page, page);
         System.out.println(objects);
-        List<Job> list = this.list(query);
-        System.out.println("工作岗位列表：" + list);
-        return R.success(list);
 
-//        return null;
+        List<Job> list = this.list(query);
+        return R.success(list);
     }
 }
 

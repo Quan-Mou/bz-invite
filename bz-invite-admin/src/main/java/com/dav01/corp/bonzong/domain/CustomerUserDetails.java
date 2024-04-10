@@ -1,7 +1,9 @@
 package com.dav01.corp.bonzong.domain;
 
 import com.dav01.corp.bonzong.domain.entity.Employee;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -13,14 +15,12 @@ import java.util.Collection;
  * @Description:
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class CustomerUserDetails implements UserDetails {
-
 
     private Employee employee;
 
-    public CustomerUserDetails(Employee employee) {
-        this.employee = employee;
-    }
 
 
     @Override

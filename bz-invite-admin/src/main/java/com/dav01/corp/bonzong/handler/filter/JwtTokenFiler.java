@@ -1,6 +1,7 @@
 package com.dav01.corp.bonzong.handler.filter;
 
 import com.alibaba.fastjson.JSON;
+import com.dav01.corp.bonzong.config.RedisKeyUserBuilder;
 import com.dav01.corp.bonzong.constant.SystemEnum;
 import com.dav01.corp.bonzong.domain.CustomerUserDetails;
 import com.dav01.corp.bonzong.domain.R;
@@ -8,6 +9,8 @@ import com.dav01.corp.bonzong.handler.Context;
 import com.dav01.corp.bonzong.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -28,6 +31,10 @@ import java.io.IOException;
 @Component
 @Slf4j
 public class JwtTokenFiler extends OncePerRequestFilter {
+
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
 
     @Override
@@ -57,8 +64,11 @@ public class JwtTokenFiler extends OncePerRequestFilter {
             return;
         }
         logger.info("token有效，为登录状态");
-        CustomerUserDetails customerUserDetails = Context.local.get();
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(customerUserDetails, null, null);
+//        CustomerUserDetails customerUserDetails = Context.local.get();
+
+        CustomerUserDetails customerUserDetails1 = (CustomerUserDetails) redisTemplate.opsForValue().get(RedisKeyUserBuilder.builderUserKey(claims.getSubject()));
+        System.out.println(customerUserDetails1);
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(customerUserDetails1, null, null);
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         filterChain.doFilter(request,response);
     }

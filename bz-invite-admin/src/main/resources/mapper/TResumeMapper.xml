@@ -6,5 +6,25 @@
 
     </resultMap>
 
+
+    <select id="listByCondition" resultType="com.dav01.corp.bonzong.domain.entity.Resume">
+--         Integer jobId, , education Date createTime, Integer isRead, String userName);
+        select * from t_resume
+        <where>
+            <if test="education != null">
+                education = #{education}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="isRead != null">
+                and is_read = #{isRead}
+            </if>
+            <if test="userName != null">
+                and user_name = #{userName}
+            </if>
+        </where>
+    </select>
+
 </mapper>
 

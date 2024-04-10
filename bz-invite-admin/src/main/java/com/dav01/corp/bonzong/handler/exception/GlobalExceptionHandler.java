@@ -24,6 +24,13 @@ import java.util.Map;
 @Slf4j
 public class GlobalExceptionHandler {
 
+
+    @ExceptionHandler(SystemException.class)
+    public R systemExcepitonHandler(SystemException e) {
+        System.out.println("systemExcepitonHandler");
+        return null;
+    }
+
     @ExceptionHandler(Exception.class)
     public R exceptionHandler(Exception e) {
         if(e instanceof BindingResult) {
@@ -47,10 +54,5 @@ public class GlobalExceptionHandler {
 
 
 
-    @ExceptionHandler(SystemException.class)
-    public R systemExcepitonHandler(SystemException e) {
-        System.out.println("systemExcepitonHandler");
-        return null;
-    }
 
 }

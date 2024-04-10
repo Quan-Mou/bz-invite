@@ -34,7 +34,14 @@ public class CustomerUserDetailService implements UserDetailsService {
         log.info("loadUserByUsername ： 用户名： {}",username);
         LambdaQueryWrapper<Employee> queryWrapper = new LambdaQueryWrapper();
 //       使用工号或者手机号登录
-        queryWrapper.eq(Employee::getAccountNumber,username).or().eq(Employee::getPassword,username);
+
+
+
+
+
+//        queryWrapper.eq(Employee::getAccountNumber,username).or().eq(Employee::getPassword,username);
+        queryWrapper.eq(Employee::getAccountNumber,username).or().eq(Employee::getPhone,username);
+
         Employee employee = employeeMapper.selectOne(queryWrapper);
         if (employee == null) {
 //            TODO: 全局异常处理只会处理Controller层的异常，为什么service层抛出自定义异常会被Exception捕获

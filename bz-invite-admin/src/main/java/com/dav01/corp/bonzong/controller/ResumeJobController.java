@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
  * @author RestfulToolkitXCode
  * @since 2024-03-26 19:14:04
  */
-@ApiOperation(value = "投递-岗位-中间接口")
+@ApiOperation(value = "投递-岗位-中间接口对应t_resume_attachment表")
 @RestController
 @RequestMapping("resumeJob")
 public class ResumeJobController  {

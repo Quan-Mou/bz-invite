@@ -1,6 +1,9 @@
 package com.dav01.corp.bonzong.controller;
 
+import com.dav01.corp.bonzong.domain.R;
 import com.dav01.corp.bonzong.domain.ResultPage;
+import com.dav01.corp.bonzong.domain.entity.Resume;
+import com.dav01.corp.bonzong.domain.vo.ResumeVo;
 import com.dav01.corp.bonzong.service.IResumeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author: 权某人
@@ -36,14 +40,19 @@ public class ResumeManagerController {
             @RequestParam(name = "page") Integer page,
             @RequestParam(name = "pageSize") Integer pageSize,
             @RequestParam(name = "jobId",required = false) Integer jobId,
-            @RequestParam(name = "schoolProvince",required = false) String schoolProvince,
+            @RequestParam(name = "education",required = false) String education,
             @RequestParam(name = "createTIme",required = false) Date createTime,
             @RequestParam(name = "isRead",required = false) Integer isRead,
             @RequestParam(name = "userName",required = false) String userName
             ) {
 //        TODO :查看应聘列表
-
-        return null;
+        List<ResumeVo> list = resumeService.list(page, pageSize, jobId, education, createTime, isRead, userName);
+//        TODO: 这里没有处理好分页
+        System.out.println(list);
+        ResultPage resultPage = new ResultPage();
+        resultPage.setData(list);
+        resultPage.setTotal(11);
+        return resultPage;
     }
 
 

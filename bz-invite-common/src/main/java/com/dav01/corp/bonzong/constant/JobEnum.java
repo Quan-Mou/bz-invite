@@ -12,7 +12,7 @@ public enum JobEnum {
 
 
 
-    JOB_CATEGORY_NOT_NULL(420,"请输入手机号"),
+    JOB_CATEGORY_NOT_NULL(420,"岗位分类不能为空"),
     NOT_DELETE_SEND_JOB(421,"不能删除已投递过的岗位");
 
     private Integer code;
