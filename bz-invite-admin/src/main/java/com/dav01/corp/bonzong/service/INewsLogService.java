@@ -11,5 +11,7 @@ import com.dav01.corp.bonzong.domain.entity.NewsLog;
  */
 public interface INewsLogService extends IService<NewsLog> {
 
+
+
 }
 

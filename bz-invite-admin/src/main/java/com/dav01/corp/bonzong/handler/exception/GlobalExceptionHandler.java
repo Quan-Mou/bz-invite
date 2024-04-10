@@ -49,6 +49,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(SystemException.class)
     public R systemExcepitonHandler(SystemException e) {
+        System.out.println("systemExcepitonHandler");
         return null;
     }
 

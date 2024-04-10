@@ -13,6 +13,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Random;
+
 
 /**
  * @author: 权某人
@@ -38,6 +40,9 @@ public class CustomerUserDetailService implements UserDetailsService {
 //            TODO: 全局异常处理只会处理Controller层的异常，为什么service层抛出自定义异常会被Exception捕获
             throw new SystemException(SystemEnum.NOT_EMPLOYEE);
         }
+
+
+
         return new CustomerUserDetails(employee);
     }
 }
