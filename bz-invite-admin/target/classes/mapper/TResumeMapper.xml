@@ -24,6 +24,7 @@
                 and user_name = #{userName}
             </if>
         </where>
+        order by #{createTime}
     </select>
 
 </mapper>

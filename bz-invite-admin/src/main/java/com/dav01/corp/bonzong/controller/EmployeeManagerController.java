@@ -12,6 +12,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * @author: 权某人
  * @create: 2024-03-25 23:10
@@ -44,6 +49,9 @@ public class EmployeeManagerController {
 //        TODO:修改员工状态
         return employeeService.update(employee);
     }
+
+
+
 
 
 
