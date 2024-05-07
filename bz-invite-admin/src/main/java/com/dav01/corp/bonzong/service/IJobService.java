@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.dav01.corp.bonzong.domain.R;
 import com.dav01.corp.bonzong.domain.dto.AddJobDTO;
 import com.dav01.corp.bonzong.domain.entity.Job;
+import com.dav01.corp.bonzong.domain.vo.LogOperatorVo;
 
 import java.util.List;
 
@@ -21,14 +22,14 @@ public interface IJobService extends IService<Job> {
      * @param job
      * @return
      */
-    R insert(Integer jobCategory, AddJobDTO job);
+    LogOperatorVo insert(Integer jobCategory, AddJobDTO job);
 
     /**
      * 批量删除岗位
      * @param ids
      * @return
      */
-    R batchDelete(List<Integer> ids);
+    LogOperatorVo batchDelete(List<Integer> ids);
 
 
     /**
@@ -36,7 +37,7 @@ public interface IJobService extends IService<Job> {
      * @param id
      * @return
      */
-    R update(Job job);
+    LogOperatorVo update(Job job);
 
 
     /**

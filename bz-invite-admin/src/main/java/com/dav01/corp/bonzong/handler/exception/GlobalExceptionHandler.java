@@ -41,8 +41,6 @@ public class GlobalExceptionHandler {
             });
             return new R(SystemEnum.CHECK_ERROR,map);
         }
-
-
         if(e instanceof  SystemException) {
             log.debug("Execute Customer-SystemException");
             return new R(((SystemException) e).getCode(),((SystemException) e).getMsg());
@@ -51,8 +49,4 @@ public class GlobalExceptionHandler {
         log.error("e.getMessage() : {}",e.getMessage());
         return new R(401,e.getMessage());
     }
-
-
-
-
 }

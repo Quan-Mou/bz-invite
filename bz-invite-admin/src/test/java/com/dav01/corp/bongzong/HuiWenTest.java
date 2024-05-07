@@ -15,10 +15,13 @@ import java.util.Objects;
 public class HuiWenTest {
 
     public static void main(String[] args) {
-        System.out.println(isPalindrome("A man, a plan, a canal: Panama"));
-        System.out.println(isPalindrome("raceacar"));
-        System.out.println(isPalindrome("0p"));
+//        System.out.println(isPalindrome("A man, a plan, a canal: Panama"));
+//        System.out.println(isPalindrome("raceacar"));
+//        System.out.println(isPalindrome("0p"));
 
+
+
+        List<Integer> num = new ArrayList<>();
     }
 
     //

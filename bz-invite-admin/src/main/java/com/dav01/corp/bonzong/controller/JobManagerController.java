@@ -3,6 +3,8 @@ package com.dav01.corp.bonzong.controller;
 import com.dav01.corp.bonzong.domain.R;
 import com.dav01.corp.bonzong.domain.dto.AddJobDTO;
 import com.dav01.corp.bonzong.domain.entity.Job;
+import com.dav01.corp.bonzong.domain.vo.LogOperatorVo;
+import com.dav01.corp.bonzong.handler.exception.SystemException;
 import com.dav01.corp.bonzong.service.IJobService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -10,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
+
+import static net.sf.jsqlparser.parser.feature.Feature.insert;
 
 /**
  * @author: 权某人
@@ -31,7 +36,12 @@ public class JobManagerController {
     public R save( @RequestParam(name = "jobCategory") Integer jobCategory, @RequestBody AddJobDTO job) {
 //        TODO：新增岗位
 
-        return jobService.insert(jobCategory,job);
+//        return jobService.insert(jobCategory,job);
+        LogOperatorVo insert = jobService.insert(jobCategory, job);
+        if (Objects.isNull(insert)) {
+            throw new SystemException(410,"insertFail");
+        }
+        return R.success();
     }
 
 
@@ -39,7 +49,8 @@ public class JobManagerController {
     @DeleteMapping ("batchDelete")
     public R batchDelete(@RequestParam(name = "ids") List<Integer> ids) {
 //        TODO：批量删除岗位
-        return jobService.batchDelete(ids);
+        LogOperatorVo logOperatorVo = jobService.batchDelete(ids);
+        return R.success();
     }
 
 
@@ -48,7 +59,10 @@ public class JobManagerController {
     @PutMapping("update")
     public R update(@RequestBody Job job) {
 //        TODO：修改岗位信息
-        return jobService.update(job);
+
+        LogOperatorVo update = jobService.update(job);
+        return R.success();
+//        return jobService.update(job);
     }
 
 

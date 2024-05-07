@@ -19,6 +19,11 @@
         </dependency>
 
 
+        <!--   AOP     -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
 
         <!-- 安全性和身份验证 -->
         <dependency>

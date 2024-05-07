@@ -2,6 +2,8 @@ package com.dav01.corp.bonzong.domain.entity;
 
 import java.util.Date;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import java.io.Serializable;
 
@@ -14,6 +16,7 @@ import java.io.Serializable;
 @Data
 public class Job implements Serializable {
     //岗位ID
+    @TableId(type = IdType.AUTO)
     private Integer jobId;
     //岗位名称
     private String jobName;
@@ -33,6 +36,8 @@ public class Job implements Serializable {
     private Date createTime;
     //更新时间
     private Date updateTime;
+    //逻辑删除
+    private byte isDelete;
 
-    }
+}
 

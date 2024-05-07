@@ -16,7 +16,12 @@ public enum SystemEnum {
 
     LOGIN_EXPIRE(401,"登录过期"),
 
-    CHECK_ERROR(400,"提交的数据不合法");
+    CHECK_ERROR(400,"提交的数据不合法"),
+    ACCOUNT_OFFLINE(450,"该账号在另一台设备上登录，您被强制下线，请您重新登陆！");
+
+
+
+
 
 
 
