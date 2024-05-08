@@ -6,7 +6,6 @@ import com.dav01.corp.bonzong.domain.CustomerUserDetails;
 import com.dav01.corp.bonzong.domain.R;
 import com.dav01.corp.bonzong.domain.dto.LoginDTO;
 import com.dav01.corp.bonzong.domain.entity.Employee;
-import com.dav01.corp.bonzong.handler.Context;
 import com.dav01.corp.bonzong.service.LoginService;
 import com.dav01.corp.bonzong.util.JwtUtil;
 import com.dav01.corp.bonzong.util.MySessionContext;
@@ -57,20 +56,10 @@ public class LoginServiceImpl implements LoginService {
         CustomerUserDetails customerUserDetails = (CustomerUserDetails) authenticate.getPrincipal();
         Employee employee = customerUserDetails.getEmployee();
         String jwt = JwtUtil.createJWT(employee.getEmployeeId().toString());
-        log.debug("jwt:{}",jwt);
-
-//        context.addSession(employee.getEmployeeId().toString(),session);
         redisTemplate.opsForValue().set(RedisKeyUserBuilder.builderUserKey(employee.getEmployeeId().toString()),customerUserDetails);
-//        request.getSession().setAttribute("user",employee.getEmployeeId());
-//        Context.local.set(customerUserDetails);
-//        request.setAttribute(employee.getEmployeeId().toString(),session);
-//        session.setAttribute(employee.getEmployeeId().toString(),employee);
+//        redisTemplate.opsForValue().set("sessionId",request.getSession().getId());
+        redisTemplate.opsForValue().set("token",jwt);
 
-        request.getSession().setAttribute("userId",employee.getEmployeeId());
-//        redisTemplate.opsForValue().set(employee.getEmployeeId().toString(),request.getSession().getId());
-        redisTemplate.opsForValue().set(RedisKeyUserIdBuilder.builderUserKey(employee.getEmployeeId().toString()),request.getSession().getId());
-
-//        redisTemplate.opsForValue().set(employee.getEmployeeId(),request.getSession().getId());
         return new R(200,"登录成功",jwt);
     }
 
@@ -86,13 +75,18 @@ public class LoginServiceImpl implements LoginService {
             long currentSecond = System.currentTimeMillis() / 1000;
 //          如果结果是一个正数，那么表示令牌还有多少时间才会过期。如果结果是负数或零，则表示令牌已经过期或刚刚过期
             long exp = expirationSecond - currentSecond;
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            CustomerUserDetails customerUserDetails = (CustomerUserDetails) authentication.getPrincipal();
+
+            String userId = claims.getSubject();
+            CustomerUserDetails customerUserDetails = (CustomerUserDetails) redisTemplate.opsForValue().get(RedisKeyUserBuilder.builderUserKey(userId));
+//            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//            CustomerUserDetails customerUserDetails = (CustomerUserDetails) authentication.getPrincipal();
+
             if(customerUserDetails == null || customerUserDetails.getEmployee() == null) {
                 throw new RuntimeException("没有获取到userId");
             }
             Integer employeeId = customerUserDetails.getEmployee().getEmployeeId();
             redisTemplate.opsForValue().set(token,employeeId,exp, TimeUnit.SECONDS);
+            redisTemplate.delete(RedisKeyUserBuilder.builderUserKey(employeeId.toString()));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
